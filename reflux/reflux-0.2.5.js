@@ -18,8 +18,8 @@ type RefluxAction = Function & Hooks & {
   listen: Function;
   completed: RefluxAction;
   failed: RefluxAction;
-  promise: (promise: Promise) => any;
-  listenAndPromise: (asyncOperation: (...payloads: any) => Promise) => any;
+  promise(promise: Promise): any;
+  listenAndPromise(asyncOperation: (...payloads: any) => Promise): any;
 };
 
 type StoreOptions = {
@@ -29,8 +29,8 @@ type StoreOptions = {
 type Store = {
   listen: Function;
   trigger: Function;
-  listenToMany: (actions: {[key: string]: RefluxAction}) => any;
-  listenTo: (action: RefluxAction, listener: Function) => any;
+  listenToMany(actions: {[key: string]: RefluxAction}): any;
+  listenTo(action: RefluxAction, listener: Function): any;
   listenables: Object;
 };
 
