@@ -1,17 +1,14 @@
 type RefluxActionChild = "progressed" | "completed" | "failed";
 
-type Hooks = {
-  preEmit?: Function;
-  shouldEmit?: (preEmitValue: any) => boolean;
-}
-
-type RefluxActionOptions = Hooks & {
+type RefluxActionOptions = {
   sync?: boolean;
   asyncResult?: boolean;
   children?: RefluxActionChild[];
+  preEmit?: Function;
+  shouldEmit?: (preEmitValue: any) => boolean;
 };
 
-type RefluxAction = Function & Hooks & {
+type RefluxActionProps = {
   sync: boolean;
   triggerAsync: Function;
   trigger: Function;
@@ -20,19 +17,23 @@ type RefluxAction = Function & Hooks & {
   failed: RefluxAction;
   promise(promise: Promise): any;
   listenAndPromise(asyncOperation: (...payloads: any) => Promise): any;
+  preEmit?: Function;
+  shouldEmit?: (preEmitValue: any) => boolean;
 };
 
-type StoreOptions = {
+type RefluxAction = Function & RefluxActionProps;
+
+type RefluxStoreOptions = {
   init: Function;
 };
 
-type Store = {
+declare class RefluxStore {
   listen: Function;
   trigger: Function;
   listenToMany(actions: {[key: string]: RefluxAction}): any;
   listenTo(action: RefluxAction, listener: Function): any;
   listenables: Object;
-};
+}
 
 declare module reflux {
 
@@ -40,6 +41,6 @@ declare module reflux {
 
   declare function createActions(options: string[] | {[key: string]: RefluxActionOptions;}): Object;
 
-  declare function createStore(options: StoreOptions): Store;
+  declare function createStore(options: RefluxStoreOptions): RefluxStore;
 
 }
