@@ -28,7 +28,7 @@ type RefluxStoreOptions = {
 };
 
 declare class RefluxStore {
-  listen: Function;
+  listen: (callback: Function) => (() => void); // unsubscribe()
   trigger: Function;
   listenToMany(actions: {[key: string]: RefluxAction}): any;
   listenTo(action: RefluxAction, listener: Function): any;
