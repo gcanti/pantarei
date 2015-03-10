@@ -33,6 +33,8 @@ declare class RefluxStore {
   listenToMany(actions: {[key: string]: RefluxAction}): any;
   listenTo(action: RefluxAction, listener: Function): any;
   listenables: Object;
+  preEmit?: Function;
+  shouldEmit?: (preEmitValue: any) => boolean;
 }
 
 declare module reflux {
