@@ -1,5 +1,5 @@
-import t from 'tcomb';
-import type { Type } from 'tcomb';
+import type { $Type } from 'tcomb'
+import t from 'tcomb'
 
 declare module 'tcomb-react' {
 
@@ -8,12 +8,12 @@ declare module 'tcomb-react' {
   };
 
   declare var exports: {
-    props: Function;
-    propTypes(type: Type, options?: Options): any;
-    ReactElement: Type;
-    ReactNode: Type;
-    ReactChild: Type;
-    ReactChildren: Type;
     t: typeof t;
+    props(type: $Type | Object, options?: Options): any;
+    propTypes(type: $Type | Object, options?: Options): any;
+    ReactElement: $Type,
+    ReactNode: $Type,
+    ReactChild: $Type,
+    ReactChildren: $Type
   };
 }
