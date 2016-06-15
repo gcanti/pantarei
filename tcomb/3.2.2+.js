@@ -1,14 +1,14 @@
 declare module 'tcomb' {
 
   // runtime type introspection hack
-  declare type $Reify<T> = Type<T>;
+  declare type $Reify<T> = $Type<T>;
 
   // refinement hack
   declare interface $Refinement<P: (x: any) => boolean> {}
 
   declare type Predicate = (x: any) => boolean;
 
-  declare type Props = {[key: string]: Type};
+  declare type Props = {[key: string]: $Type};
 
   declare type MetaIrreducible = {
     kind: 'irreducible',
@@ -21,7 +21,7 @@ declare module 'tcomb' {
     kind: 'refinement',
     name: ?string,
     identity: boolean,
-    type: Type,
+    type: $Type,
     predicate: Predicate
   };
 
@@ -29,7 +29,7 @@ declare module 'tcomb' {
     kind: 'maybe',
     name: ?string,
     identity: boolean,
-    type: Type
+    type: $Type
   };
 
   declare type MetaStruct = {
@@ -53,30 +53,30 @@ declare module 'tcomb' {
     kind: 'func',
     name: ?string,
     identity: true,
-    domain: Array<Type>,
-    codomain: Type
+    domain: Array<$Type>,
+    codomain: $Type
   };
 
   declare type MetaTuple = {
     kind: 'tuple',
     name: ?string,
     identity: boolean,
-    types: Array<Type>
+    types: Array<$Type>
   };
 
   declare type MetaList = {
     kind: 'list',
     name: ?string,
     identity: boolean,
-    type: Type
+    type: $Type
   };
 
   declare type MetaDict = {
     kind: 'dict',
     name: ?string,
     identity: boolean,
-    domain: Type,
-    codomain: Type
+    domain: $Type,
+    codomain: $Type
   };
 
   declare type MetaEnums = {
@@ -90,14 +90,14 @@ declare module 'tcomb' {
     kind: 'union',
     name: ?string,
     identity: boolean,
-    types: Array<Type>
+    types: Array<$Type>
   };
 
   declare type MetaIntersection = {
     kind: 'intersection',
     name: ?string,
     identity: boolean,
-    types: Array<Type>
+    types: Array<$Type>
   };
 
   declare type Meta =
@@ -114,7 +114,7 @@ declare module 'tcomb' {
     | MetaUnion
     | MetaIntersection;
 
-  declare interface Type<T> {
+  declare interface $Type<T> {
     (x: T): T;
     is(x: any): boolean;
     meta: Meta;
@@ -148,23 +148,24 @@ declare module 'tcomb' {
   declare type CommandMerge = { $merge: Object; };
   declare type OptionsUpdate = {[key: string]: Command};
 
-  declare interface Struct<T> extends Type<T> {
+  declare interface Struct<T> extends $Type<T> {
+    new (x: T): T;
     update(instance: Struct, options: OptionsUpdate): Struct;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct;
   }
 
-  declare interface Interface<T> extends Type<T> {
+  declare interface Interface<T> extends $Type<T> {
     update(instance: Interface, options: OptionsUpdate): Interface;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsInterface): Interface;
   }
 
   declare interface Enums {
-    (map: {[key: string]: any}, name?: string): Type;
-    of(enums: string | Array<string>): Type;
+    (map: {[key: string]: any}, name?: string): $Type;
+    of(enums: string | Array<string>): $Type;
   }
 
-  declare interface Declare extends Type {
-    define(type: Type): void;
+  declare interface Declare extends $Type {
+    define(type: $Type): void;
   }
 
   declare type Message = string | () => string;
@@ -177,34 +178,35 @@ declare module 'tcomb' {
     stringify(x: any): string;
     mixin(target: Object, source: ?Object, unsafe?: boolean): Object;
     update(instance: Object, options: OptionsUpdate): Object;
+    isType: Predicate;
 
     // irreducibles
-    Nil: Type<void | null>;
-    String: Type<string>;
-    Number: Type<number>;
-    Integer: Type<number>;
-    Boolean: Type<boolean>;
-    Array: Type<Array<any>>;
-    Object: Type<Object>;
-    Function: Type<Function>;
-    Error: Type<Error>;
-    RegExp: Type<RegExp>;
-    Date: Type<Date>;
-    Any: Type<any>;
-    Type: Type<Type>;
+    Nil: $Type<void | null>;
+    String: $Type<string>;
+    Number: $Type<number>;
+    Integer: $Type<number>;
+    Boolean: $Type<boolean>;
+    Array: $Type<Array<any>>;
+    Object: $Type<Object>;
+    Function: $Type<Function>;
+    Error: $Type<Error>;
+    RegExp: $Type<RegExp>;
+    Date: $Type<Date>;
+    Any: $Type<any>;
+    Type: $Type<$Type>;
 
     // combinators
-    irreducible(name: string, predicate: Predicate): Type;
-    refinement(type: Type, predicate: Predicate, name?: string): Type;
+    irreducible(name: string, predicate: Predicate): $Type;
+    refinement(type: $Type, predicate: Predicate, name?: string): $Type;
     enums: Enums;
-    maybe(type: Type, name?: string): Type;
-    struct(props: {[key: string]: Type}, options?: OptionsStruct): Struct;
-    tuple(types: Array<Type>, name?: string): Type;
-    list<T>(type: Type<T>, name?: string): Type<Array<T>>;
-    dict(domain: Type, codomain: Type, name?: string): Type;
-    union(types: Array<Type>, name?: string): Type;
-    intersection(types: Array<Type>, name?: string): Type;
-    interface(props: {[key: string]: Type}, options?: OptionsInterface): Interface;
+    maybe(type: $Type, name?: string): $Type;
+    struct(props: {[key: string]: $Type}, options?: OptionsStruct): Struct;
+    tuple(types: Array<$Type>, name?: string): $Type;
+    list<T>(type: $Type<T>, name?: string): $Type<Array<T>>;
+    dict(domain: $Type, codomain: $Type, name?: string): $Type;
+    union(types: Array<$Type>, name?: string): $Type;
+    intersection(types: Array<$Type>, name?: string): $Type;
+    interface(props: {[key: string]: $Type}, options?: OptionsInterface): Interface;
     declare(name: string): Declare;
 
   };
