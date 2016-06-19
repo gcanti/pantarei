@@ -6,6 +6,8 @@ declare module 'tcomb' {
   // refinement hack
   declare interface $Refinement<P: (x: any) => boolean> {}
 
+  declare type $Integer = number;
+
   declare type Predicate = (x: any) => boolean;
 
   declare type Props = {[key: string]: $Type};
