@@ -10,7 +10,7 @@ declare module 'tcomb' {
 
   declare type Predicate = (x: any) => boolean;
 
-  declare type Props = {[key: string]: TypeT};
+  declare type Props = {[key: string]: TypeT<*>};
 
   declare type MetaIrreducible = {
     kind: 'irreducible',
@@ -23,7 +23,7 @@ declare module 'tcomb' {
     kind: 'refinement',
     name: ?string,
     identity: boolean,
-    type: TypeT,
+    type: TypeT<*>,
     predicate: Predicate
   };
 
@@ -31,7 +31,7 @@ declare module 'tcomb' {
     kind: 'maybe',
     name: ?string,
     identity: boolean,
-    type: TypeT
+    type: TypeT<*>
   };
 
   declare type MetaStruct = {
@@ -55,30 +55,30 @@ declare module 'tcomb' {
     kind: 'func',
     name: ?string,
     identity: true,
-    domain: Array<TypeT>,
-    codomain: TypeT
+    domain: Array<TypeT<*>>,
+    codomain: TypeT<*>
   };
 
   declare type MetaTuple = {
     kind: 'tuple',
     name: ?string,
     identity: boolean,
-    types: Array<TypeT>
+    types: Array<TypeT<*>>
   };
 
   declare type MetaList = {
     kind: 'list',
     name: ?string,
     identity: boolean,
-    type: TypeT
+    type: TypeT<*>
   };
 
   declare type MetaDict = {
     kind: 'dict',
     name: ?string,
     identity: boolean,
-    domain: TypeT,
-    codomain: TypeT
+    domain: TypeT<*>,
+    codomain: TypeT<*>
   };
 
   declare type MetaEnums = {
@@ -92,14 +92,14 @@ declare module 'tcomb' {
     kind: 'union',
     name: ?string,
     identity: boolean,
-    types: Array<TypeT>
+    types: Array<TypeT<*>>
   };
 
   declare type MetaIntersection = {
     kind: 'intersection',
     name: ?string,
     identity: boolean,
-    types: Array<TypeT>
+    types: Array<TypeT<*>>
   };
 
   declare type Meta =
@@ -130,7 +130,7 @@ declare module 'tcomb' {
     string
     | { name?: string, strict?: boolean };
 
-  declare type Mixin = Struct | Interface | Props;
+  declare type Mixin = Struct<*> | Interface<*> | Props;
 
   declare type Command = OptionsUpdate
     | CommandSet
@@ -153,22 +153,22 @@ declare module 'tcomb' {
 
   declare interface Struct<T> extends TypeT<T> {
     new (x: T): T;
-    update(instance: Struct, options: OptionsUpdate): Struct;
-    extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct;
+    update(instance: Struct<T>, options: OptionsUpdate): Struct<T>;
+    extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct<*>;
   }
 
   declare interface Interface<T> extends TypeT<T> {
-    update(instance: Interface, options: OptionsUpdate): Interface;
-    extend(mixins: Mixin | Array<Mixin>, options?: OptionsInterface): Interface;
+    update(instance: Interface<T>, options: OptionsUpdate): Interface<T>;
+    extend(mixins: Mixin | Array<Mixin>, options?: OptionsInterface): Interface<*>;
   }
 
   declare interface Enums {
-    (map: {[key: string]: any}, name?: string): TypeT;
-    of(enums: string | Array<string>): TypeT;
+    (map: {[key: string]: any}, name?: string): TypeT<*>;
+    of(enums: string | Array<string>): TypeT<*>;
   }
 
-  declare interface Declare extends TypeT {
-    define(type: TypeT): void;
+  declare interface Declare extends TypeT<*> {
+    define(type: TypeT<*>): void;
   }
 
   declare type Message = string | () => string;
@@ -196,20 +196,20 @@ declare module 'tcomb' {
     RegExp: TypeT<RegExp>;
     Date: TypeT<Date>;
     Any: TypeT<any>;
-    Type: TypeT<TypeT>;
+    Type: TypeT<TypeT<*>>;
 
     // combinators
-    irreducible(name: string, predicate: Predicate): TypeT;
-    refinement(type: TypeT, predicate: Predicate, name?: string): TypeT;
+    irreducible(name: string, predicate: Predicate): TypeT<*>;
+    refinement(type: TypeT<*>, predicate: Predicate, name?: string): TypeT<*>;
     enums: Enums;
-    maybe(type: TypeT, name?: string): TypeT;
-    struct(props: {[key: string]: TypeT}, options?: OptionsStruct): Struct;
-    tuple(types: Array<TypeT>, name?: string): TypeT;
+    maybe(type: TypeT<*>, name?: string): TypeT<*>;
+    struct(props: {[key: string]: TypeT<*>}, options?: OptionsStruct): Struct<*>;
+    tuple(types: Array<TypeT<*>>, name?: string): TypeT<*>;
     list<T>(type: TypeT<T>, name?: string): TypeT<Array<T>>;
-    dict(domain: TypeT, codomain: TypeT, name?: string): TypeT;
-    union(types: Array<TypeT>, name?: string): TypeT;
-    intersection(types: Array<TypeT>, name?: string): TypeT;
-    interface(props: {[key: string]: TypeT}, options?: OptionsInterface): Interface;
+    dict(domain: TypeT<*>, codomain: TypeT<*>, name?: string): TypeT<*>;
+    union(types: Array<TypeT<*>>, name?: string): TypeT<*>;
+    intersection(types: Array<TypeT<*>>, name?: string): TypeT<*>;
+    interface(props: {[key: string]: TypeT<*>}, options?: OptionsInterface): Interface<*>;
     declare(name: string): Declare;
 
   };
