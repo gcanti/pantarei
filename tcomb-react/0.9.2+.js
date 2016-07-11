@@ -1,4 +1,3 @@
-import React from 'react'
 import type { Type } from 'tcomb'
 
 declare module 'tcomb-react' {
@@ -7,7 +6,7 @@ declare module 'tcomb-react' {
     strict?: boolean
   };
 
-  declare type ReactElementT = typeof React.Element;
+  declare type ReactElementT = React$Element<*>;
 
   declare type ReactNodeT = string | number | ReactElementT | Array<ReactElementT>;
 
