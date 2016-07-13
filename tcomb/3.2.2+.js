@@ -132,15 +132,16 @@ declare module 'tcomb' {
 
   declare type Mixin = Struct<*> | Interface<*> | Props;
 
-  declare type Command = OptionsUpdate
-    | CommandSet
+  declare type Command
+    = CommandSet
     | CommandApply
     | CommandPush
     | CommandRemove
     | CommandSplice
     | CommandSwap
     | CommandUnshift
-    | CommandMerge;
+    | CommandMerge
+    | OptionsUpdate;
   declare type CommandSet = { $set: any };
   declare type CommandApply = { $apply: Function; };
   declare type CommandPush = { $push: Array<any>; };
