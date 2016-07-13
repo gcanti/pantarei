@@ -4,11 +4,11 @@ declare module 'tcomb' {
   declare type $Reify<T> = TypeT<T>;
 
   // refinement hack
-  declare interface $Refinement<P: (x: any) => boolean> {}
+  declare type Predicate = (x: any) => boolean;
+
+  declare interface $Refinement<P: Predicate> {}
 
   declare type IntegerT = number;
-
-  declare type Predicate = (x: any) => boolean;
 
   declare type Props = {[key: string]: TypeT<*>};
 
