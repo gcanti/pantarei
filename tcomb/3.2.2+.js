@@ -213,5 +213,22 @@ declare module 'tcomb' {
     interface(props: {[key: string]: TypeT<*>}, options?: OptionsInterface): Interface<*>;
     declare(name: string): Declare;
 
+    // other functions
+    assert(guard: boolean, message?: string | () => string): void;
+    update<T>(instance: T, options: OptionsUpdate): T;
+    mixin(target: Object, source: Object, unsafe?: boolean): Object;
+    isType(x: any): boolean;
+    is(x: any, type: Function | TypeT<*>): boolean;
+    getTypeName(type: Function | TypeT<*>): string;
+    match(x: any, ...cases: Array<any>): any;
+
   };
+}
+
+declare module 'tcomb/lib/fromJSON' {
+  declare var exports: (value: any, type: Function) => any;
+}
+
+declare module 'tcomb/lib/isSubsetOf' {
+  declare var exports: (a: Function, b: Function) => boolean;
 }
