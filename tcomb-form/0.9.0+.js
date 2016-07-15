@@ -1,6 +1,6 @@
 declare module 'tcomb-form' {
 
-  declare var exports: {
+  declare module.exports: {
     form: {
       Form: React$Component
     }

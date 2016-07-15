@@ -16,7 +16,7 @@ declare module 'tcomb-validation' {
     value: any
   }>;
 
-  declare var exports: {
+  declare module.exports: {
     ValidationError: ValidationErrorT,
     ValidationResult: ValidationResultT,
     validate(x: any, type: $Type, options?: Object): ValidationResultT

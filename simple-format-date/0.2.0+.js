@@ -19,6 +19,6 @@ declare module 'simple-format-date' {
     template: string | (locals: Locals) => string
   };
 
-  declare var exports: (date: Date, options?: Options) => string;
+  declare module.exports: (date: Date, options?: Options) => string;
 
 }

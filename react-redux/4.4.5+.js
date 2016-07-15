@@ -9,7 +9,7 @@ declare module 'react-redux' {
 
   declare type ComponentWrapper<Props, OwnProps> = (component: React.Component<any, Props, any>) => React.Component<any, OwnProps, any>;
 
-  declare var exports: {
+  declare module.exports: {
     Provider: React.Component,
     connect<State, Action, OwnProps, StateProps, DispatchProps>(
       mapStateToProps?: MapStateToProps<State, OwnProps, StateProps>,

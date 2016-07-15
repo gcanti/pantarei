@@ -114,7 +114,7 @@ declare module 'react-router' {
     state: void;
   }
 
-  declare var exports: {
+  declare module.exports: {
     Link: typeof Link;
     Route: typeof Route;
     Router: typeof Router;

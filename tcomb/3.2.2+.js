@@ -174,7 +174,7 @@ declare module 'tcomb' {
 
   declare type Message = string | () => string;
 
-  declare var exports: {
+  declare module.exports: {
 
     // utils
     assert(guard: boolean, message?: Message): void;
@@ -226,9 +226,9 @@ declare module 'tcomb' {
 }
 
 declare module 'tcomb/lib/fromJSON' {
-  declare var exports: (value: any, type: Function) => any;
+  declare module.exports: (value: any, type: Function) => any;
 }
 
 declare module 'tcomb/lib/isSubsetOf' {
-  declare var exports: (a: Function, b: Function) => boolean;
+  declare module.exports: (a: Function, b: Function) => boolean;
 }

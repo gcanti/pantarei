@@ -14,7 +14,7 @@ declare module 'tcomb-react' {
 
   declare type ReactChildrenT = ReactChildT | Array<ReactChildrenT>;
 
-  declare var exports: {
+  declare module.exports: {
     props(type: Type | Object, options?: Options): any;
     propTypes(type: Type | Object, options?: Options): any;
     ReactElement: Type,
