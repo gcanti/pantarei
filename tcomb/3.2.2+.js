@@ -154,6 +154,7 @@ declare module 'tcomb' {
 
   declare interface Struct<T> extends TypeT<T> {
     new (x: T): T;
+    (x: T): T;
     update(instance: Struct<T>, options: OptionsUpdate): Struct<T>;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct<*>;
   }
@@ -201,16 +202,16 @@ declare module 'tcomb' {
 
     // combinators
     irreducible(name: string, predicate: Predicate): TypeT<*>;
-    refinement(type: TypeT<*>, predicate: Predicate, name?: string): TypeT<*>;
+    refinement<T>(type: TypeT<T>, predicate: Predicate, name?: string): TypeT<T>;
     enums: Enums;
-    maybe(type: TypeT<*>, name?: string): TypeT<*>;
-    struct(props: {[key: string]: TypeT<*>}, options?: OptionsStruct): Struct<*>;
+    maybe<T>(type: TypeT<T>, name?: string): TypeT<T>;
+    struct<P: {[key: string]: TypeT<*>}>(props: P, options?: OptionsStruct): Struct<{[key: $Keys<P>]: *}>;
     tuple(types: Array<TypeT<*>>, name?: string): TypeT<*>;
     list<T>(type: TypeT<T>, name?: string): TypeT<Array<T>>;
     dict(domain: TypeT<*>, codomain: TypeT<*>, name?: string): TypeT<*>;
     union(types: Array<TypeT<*>>, name?: string): TypeT<*>;
     intersection(types: Array<TypeT<*>>, name?: string): TypeT<*>;
-    interface(props: {[key: string]: TypeT<*>}, options?: OptionsInterface): Interface<*>;
+    interface<P: {[key: string]: TypeT<*>}>(props: P, options?: OptionsInterface): Interface<{[key: $Keys<P>]: *}>;
     declare(name: string): Declare;
 
     // other functions
