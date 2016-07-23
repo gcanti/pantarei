@@ -6,121 +6,18 @@ declare module 'tcomb' {
   // refinement hack
   declare type Predicate = (x: any) => boolean;
 
-  declare interface $Refinement<P: Predicate> {}
+  declare type $Refinement<P: Predicate> = {};
 
   declare type IntegerT = number;
 
   declare type Props = {[key: string]: TypeT<*>};
 
-  declare type MetaIrreducible = {
-    kind: 'irreducible',
-    name: ?string,
-    identity: true,
-    predicate: Predicate
-  };
-
-  declare type MetaRefinement = {
-    kind: 'refinement',
-    name: ?string,
-    identity: boolean,
-    type: TypeT<*>,
-    predicate: Predicate
-  };
-
-  declare type MetaMaybe = {
-    kind: 'maybe',
-    name: ?string,
-    identity: boolean,
-    type: TypeT<*>
-  };
-
-  declare type MetaStruct = {
-    kind: 'struct',
-    name: ?string,
-    identity: false,
-    props: Props,
-    strict: boolean,
-    defaultProps: {[keys: string]: any}
-  };
-
-  declare type MetaInterface = {
-    kind: 'interface',
-    name: ?string,
-    identity: boolean,
-    props: Props,
-    strict: boolean
-  };
-
-  declare type MetaFunc = {
-    kind: 'func',
-    name: ?string,
-    identity: true,
-    domain: Array<TypeT<*>>,
-    codomain: TypeT<*>
-  };
-
-  declare type MetaTuple = {
-    kind: 'tuple',
-    name: ?string,
-    identity: boolean,
-    types: Array<TypeT<*>>
-  };
-
-  declare type MetaList = {
-    kind: 'list',
-    name: ?string,
-    identity: boolean,
-    type: TypeT<*>
-  };
-
-  declare type MetaDict = {
-    kind: 'dict',
-    name: ?string,
-    identity: boolean,
-    domain: TypeT<*>,
-    codomain: TypeT<*>
-  };
-
-  declare type MetaEnums = {
-    kind: 'enums',
-    name: ?string,
-    identity: true,
-    map: {[key: string]: any}
-  };
-
-  declare type MetaUnion = {
-    kind: 'union',
-    name: ?string,
-    identity: boolean,
-    types: Array<TypeT<*>>
-  };
-
-  declare type MetaIntersection = {
-    kind: 'intersection',
-    name: ?string,
-    identity: boolean,
-    types: Array<TypeT<*>>
-  };
-
-  declare type Meta =
-      MetaIrreducible
-    | MetaRefinement
-    | MetaMaybe
-    | MetaStruct
-    | MetaInterface
-    | MetaFunc
-    | MetaTuple
-    | MetaList
-    | MetaDict
-    | MetaEnums
-    | MetaUnion
-    | MetaIntersection;
-
-  declare interface TypeT<T> {
+  declare type TypeT<T> = {
     (x: T): T;
     is(x: any): boolean;
-    meta: Meta;
-  }
+    meta: Object;
+    fromJSON?: Function;
+  };
 
   declare type OptionsStruct =
     string
@@ -152,27 +49,29 @@ declare module 'tcomb' {
   declare type CommandMerge = { $merge: Object; };
   declare type OptionsUpdate = {[key: string]: Command};
 
-  declare interface Struct<T> extends TypeT<T> {
+  declare type Struct<T> = {
     new (x: T): T;
     (x: T): T;
     update(instance: T, options: OptionsUpdate): T;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct<*>;
-  }
+  } & TypeT<T>;
 
-  declare interface Interface<T> extends TypeT<T> {
+  declare type Interface<T> = {
     (x: T): T;
     update(instance: T, options: OptionsUpdate): T;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsInterface): Interface<*>;
-  }
+  } & TypeT<T>;
 
-  declare interface Enums {
+  declare type Enums = {
     (map: {[key: string]: any}, name?: string): TypeT<*>;
     of(enums: string | Array<string>): TypeT<*>;
-  }
+  };
 
-  declare interface Declare extends TypeT<*> {
+  declare type Declare = {
     define(type: TypeT<*>): void;
-  }
+  } & TypeT<*>;
+
+  declare type Ctor<T> = Function | TypeT<T>;
 
   declare module.exports: {
 
@@ -182,8 +81,8 @@ declare module 'tcomb' {
     update<T>(instance: T, options: OptionsUpdate): T;
     mixin<A: Object, B: Object>(target: A, source: B, unsafe?: boolean): A & B;
     isType(x: any): boolean;
-    is(x: any, type: Function | TypeT<*>): boolean;
-    getTypeName(type: Function | TypeT<*>): string;
+    is(x: any, type: Ctor<*>): boolean;
+    getTypeName(type: Ctor<*>): string;
     match(x: any, ...cases: Array<any>): any;
 
     // irreducibles
@@ -203,16 +102,16 @@ declare module 'tcomb' {
 
     // combinators
     irreducible(name: string, predicate: Predicate): TypeT<*>;
-    refinement<T>(type: TypeT<T>, predicate: Predicate, name?: string): TypeT<T>;
+    refinement<T>(type: Ctor<T>, predicate: Predicate, name?: string): TypeT<T>;
     enums: Enums;
-    maybe<T>(type: TypeT<T>, name?: string): TypeT<T>;
-    struct<P: {[key: string]: TypeT<*>}>(props: P, options?: OptionsStruct): Struct<{[key: $Keys<P>]: *}>;
-    tuple(types: Array<TypeT<*>>, name?: string): TypeT<*>;
-    list<T>(type: TypeT<T>, name?: string): TypeT<Array<T>>;
-    dict(domain: TypeT<*>, codomain: TypeT<*>, name?: string): TypeT<*>;
-    union(types: Array<TypeT<*>>, name?: string): TypeT<*>;
-    intersection(types: Array<TypeT<*>>, name?: string): TypeT<*>;
-    interface<P: {[key: string]: TypeT<*>}>(props: P, options?: OptionsInterface): Interface<{[key: $Keys<P>]: *}>;
+    maybe<T>(type: Ctor<T>, name?: string): TypeT<T>;
+    struct<P: {[key: string]: Ctor<*>}>(props: P, options?: OptionsStruct): Struct<{[key: $Keys<P>]: *}>;
+    tuple(types: Array<Ctor<*>>, name?: string): TypeT<*>;
+    list<T>(type: Ctor<T>, name?: string): TypeT<Array<T>>;
+    dict(domain: Ctor<*>, codomain: Ctor<*>, name?: string): TypeT<*>;
+    union(types: Array<Ctor<*>>, name?: string): TypeT<*>;
+    intersection(types: Array<Ctor<*>>, name?: string): TypeT<*>;
+    interface<P: {[key: string]: Ctor<*>}>(props: P, options?: OptionsInterface): Interface<{[key: $Keys<P>]: *}>;
     declare(name: string): Declare;
 
   };
