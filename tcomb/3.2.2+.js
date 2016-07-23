@@ -155,12 +155,13 @@ declare module 'tcomb' {
   declare interface Struct<T> extends TypeT<T> {
     new (x: T): T;
     (x: T): T;
-    update(instance: Struct<T>, options: OptionsUpdate): Struct<T>;
+    update(instance: T, options: OptionsUpdate): T;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsStruct): Struct<*>;
   }
 
   declare interface Interface<T> extends TypeT<T> {
-    update(instance: Interface<T>, options: OptionsUpdate): Interface<T>;
+    (x: T): T;
+    update(instance: T, options: OptionsUpdate): T;
     extend(mixins: Mixin | Array<Mixin>, options?: OptionsInterface): Interface<*>;
   }
 
@@ -173,17 +174,17 @@ declare module 'tcomb' {
     define(type: TypeT<*>): void;
   }
 
-  declare type Message = string | () => string;
-
   declare module.exports: {
 
-    // utils
-    assert(guard: boolean, message?: Message): void;
-    fail(message?: Message): void;
+    assert(guard: boolean, message?: string | () => string): void;
+    fail(message?: string): void;
     stringify(x: any): string;
-    mixin(target: Object, source: ?Object, unsafe?: boolean): Object;
-    update(instance: Object, options: OptionsUpdate): Object;
-    isType: Predicate;
+    update<T>(instance: T, options: OptionsUpdate): T;
+    mixin<A: Object, B: Object>(target: A, source: B, unsafe?: boolean): A & B;
+    isType(x: any): boolean;
+    is(x: any, type: Function | TypeT<*>): boolean;
+    getTypeName(type: Function | TypeT<*>): string;
+    match(x: any, ...cases: Array<any>): any;
 
     // irreducibles
     Nil: TypeT<void | null>;
@@ -213,15 +214,6 @@ declare module 'tcomb' {
     intersection(types: Array<TypeT<*>>, name?: string): TypeT<*>;
     interface<P: {[key: string]: TypeT<*>}>(props: P, options?: OptionsInterface): Interface<{[key: $Keys<P>]: *}>;
     declare(name: string): Declare;
-
-    // other functions
-    assert(guard: boolean, message?: string | () => string): void;
-    update<T>(instance: T, options: OptionsUpdate): T;
-    mixin(target: Object, source: Object, unsafe?: boolean): Object;
-    isType(x: any): boolean;
-    is(x: any, type: Function | TypeT<*>): boolean;
-    getTypeName(type: Function | TypeT<*>): string;
-    match(x: any, ...cases: Array<any>): any;
 
   };
 }
