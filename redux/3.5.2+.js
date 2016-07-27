@@ -16,7 +16,7 @@ declare module 'redux' {
 
   declare module.exports: {
     createStore<State, Action, ThirdPartyAction>(reducer: Reducer<State, Action, ThirdPartyAction>, preloadedState?: ?State): Store<State, Action>;
-    combineReducers<State, Action, ThirdPartyAction>(reducers: Object): Reducer<State, Action, ThirdPartyAction>;
+    combineReducers<State, Action, ThirdPartyAction>(reducers: {[key: $Keys<State>]: Function}): Reducer<State, Action, ThirdPartyAction>;
     applyMiddleware<State, Action>(...middlewares: Array<Middleware<State, Action>>): void;
     compose(...fn: Array<Function>): Function;
   }
