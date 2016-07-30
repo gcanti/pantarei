@@ -1,4 +1,4 @@
-import type { $Type, Struct } from 'tcomb'
+import type { TypeT, Struct } from 'tcomb'
 
 declare module 'tcomb-validation' {
 
@@ -6,7 +6,7 @@ declare module 'tcomb-validation' {
 
   declare type ValidationErrorT = Struct<{
     actual: any,
-    expected: $Type,
+    expected: TypeT<*>,
     path: Path,
     message: string
   }>;
@@ -16,10 +16,17 @@ declare module 'tcomb-validation' {
     value: any
   }>;
 
-  declare module.exports: {
+  declare type ValidationOptions = {
+    path?: Path,
+    context?: any
+  };
+
+  declare type ExtendedValidationOptions = Path | ValidationOptions;
+
+  declare var exports: {
     ValidationError: ValidationErrorT,
     ValidationResult: ValidationResultT,
-    validate(x: any, type: $Type, options?: Object): ValidationResultT
+    validate(x: any, type: TypeT<*>, options?: ExtendedValidationOptions): ValidationResultT
   };
 
 }
