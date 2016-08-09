@@ -1,23 +1,66 @@
 declare module 'redux' {
 
-  declare type Dispatch<Action> = (action: Action) => any;
+  /*
 
-  declare type Unsubscriber = () => void;
+    S = State
+    A = Action
 
-  declare type Store<State, Action> = {
-    dispatch: Dispatch<Action>;
-    getState(): State;
-    subscribe(listener: () => any): Unsubscriber;
+  */
+
+  declare type Dispatch<S, A> = (action: A) => A;
+
+  declare type MiddlewareAPI<S, A> = {
+    dispatch: Dispatch<S, A>;
+    getState(): S;
   };
 
-  declare type Reducer<State, Action, ThirdPartyAction> = (state: State, action: Action | ThirdPartyAction) => State;
+  declare type Store<S, A: { type: $Subtype<string> }> = {
+    // rewrite MiddlewareAPI members in order to get nicer error messages (intersections produce long messages)
+    dispatch: Dispatch<S, A>;
+    getState(): S;
+    subscribe(listener: () => void): () => void;
+    replaceReducer(nextReducer: Reducer<S, A>): void
+  };
 
-  declare type Middleware<State, Action> = (store: Store<State, Action>) => (next: Dispatch<Action>) => (action: Action) => State;
+  declare type Reducer<S, A> = (state: S, action: A) => S;
 
-  declare module.exports: {
-    createStore<State, Action, ThirdPartyAction>(reducer: Reducer<State, Action, ThirdPartyAction>, preloadedState?: ?State): Store<State, Action>;
-    combineReducers<State, Action, ThirdPartyAction>(reducers: {[key: $Keys<State>]: Function}): Reducer<State, Action, ThirdPartyAction>;
-    applyMiddleware<State, Action>(...middlewares: Array<Middleware<State, Action>>): void;
-    compose(...fn: Array<Function>): Function;
-  }
+  declare type Middleware<S, A> =
+    (api: MiddlewareAPI<S, A>) =>
+      (next: Dispatch<S, A>) => Dispatch<S, A>;
+
+  declare type StoreCreator<S, A> = {
+    <S, A>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
+    <S, A>(reducer: Reducer<S, A>, preloadedState: S, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
+  };
+
+  declare type StoreEnhancer<S, A> = (next: StoreCreator<S, A>) => StoreCreator<S, A>;
+
+  declare type Fn0<A> = () => A;
+  declare type Fn1<A, B1> = (b1: B1) => A;
+  declare type Fn2<A, B1, B2> = (b1: B1, b2: B2) => A;
+  declare type Fn3<A, B1, B2, B3> = (b1: B1, b2: B2, b3: B3) => A;
+  declare type Fn4<A, B1, B2, B3, B4> = (b1: B1, b2: B2, b3: B3, b4: B4) => A;
+  declare type Fn5<A, B1, B2, B3, B4, B5> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5) => A;
+  declare type Fn6<A, B1, B2, B3, B4, B5, B6> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6) => A;
+  declare type Fn7<A, B1, B2, B3, B4, B5, B6, B7> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6, b7: B7) => A;
+  declare type Fn8<A, B1, B2, B3, B4, B5, B6, B7, B8> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6, b7: B7, b8: B8) => A;
+  declare type Fn9<A, B1, B2, B3, B4, B5, B6, B7, B8, B9> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6, b7: B7, b8: B8, b9: B9) => A;
+
+  declare type ActionCreators<K, A> = { [key: K]: (...args: Array<any>) => void };
+
+  declare function createStore<S, A>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
+  declare function createStore<S, A>(reducer: Reducer<S, A>, preloadedState: S, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
+
+  declare function applyMiddleware<S, A>(...middlewares: Array<Middleware<S, A>>): StoreEnhancer<S, A>;
+
+  declare function bindActionCreators<S, A>(actionCreators: Fn0<A>, dispatch: Dispatch<S, A>): Fn0<void>;
+  declare function bindActionCreators<S, A, B1>(actionCreators: Fn1<A, B1>, dispatch: Dispatch<S, A>): Fn1<void, B1>;
+  // unsafe (all action creator signatures are erased)
+  declare function bindActionCreators<S, A, K, C: ActionCreators<K, A>>(actionCreators: C, dispatch: Dispatch<S, A>): ActionCreators<$Keys<C>, A>;
+
+  // unsafe (you can miss a field and / or assign a wrong reducer to a field)
+  declare function combineReducers<S: Object, A>(reducers: {[key: $Keys<S>]: Reducer<any, A>}): Reducer<S, A>;
+
+  declare function compose<S, A>(...fns: Array<StoreEnhancer<S, A>>): Function;
+
 }
