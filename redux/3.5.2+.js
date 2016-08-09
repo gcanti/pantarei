@@ -46,15 +46,23 @@ declare module 'redux' {
   declare type Fn8<A, B1, B2, B3, B4, B5, B6, B7, B8> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6, b7: B7, b8: B8) => A;
   declare type Fn9<A, B1, B2, B3, B4, B5, B6, B7, B8, B9> = (b1: B1, b2: B2, b3: B3, b4: B4, b5: B5, b6: B6, b7: B7, b8: B8, b9: B9) => A;
 
-  declare type ActionCreators<K, A> = { [key: K]: (...args: Array<any>) => void };
+  declare type ActionCreators<K, A> = { [key: K]: (...args: Array<any>) => A };
 
   declare function createStore<S, A>(reducer: Reducer<S, A>, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
   declare function createStore<S, A>(reducer: Reducer<S, A>, preloadedState: S, enhancer?: StoreEnhancer<S, A>): Store<S, A>;
 
   declare function applyMiddleware<S, A>(...middlewares: Array<Middleware<S, A>>): StoreEnhancer<S, A>;
 
-  declare function bindActionCreators<S, A>(actionCreators: Fn0<A>, dispatch: Dispatch<S, A>): Fn0<void>;
-  declare function bindActionCreators<S, A, B1>(actionCreators: Fn1<A, B1>, dispatch: Dispatch<S, A>): Fn1<void, B1>;
+  declare function bindActionCreators<S, A>(actionCreators: Fn0<A>, dispatch: Dispatch<S, A>): Fn0<A>;
+  declare function bindActionCreators<S, A, B1>(actionCreators: Fn1<A, B1>, dispatch: Dispatch<S, A>): Fn1<A, B1>;
+  declare function bindActionCreators<S, A, B1, B2>(actionCreators: Fn2<A, B1, B2>, dispatch: Dispatch<S, A>): Fn2<A, B1, B2>;
+  declare function bindActionCreators<S, A, B1, B2, B3>(actionCreators: Fn3<A, B1, B2, B3>, dispatch: Dispatch<S, A>): Fn3<A, B1, B2, B3>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4>(actionCreators: Fn4<A, B1, B2, B3, B4>, dispatch: Dispatch<S, A>): Fn4<A, B1, B2, B3, B4>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4, B5>(actionCreators: Fn5<A, B1, B2, B3, B4, B5>, dispatch: Dispatch<S, A>): Fn5<A, B1, B2, B3, B4, B5>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4, B5, B6>(actionCreators: Fn6<A, B1, B2, B3, B4, B5, B6>, dispatch: Dispatch<S, A>): Fn6<A, B1, B2, B3, B4, B5, B6>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4, B5, B6, B7>(actionCreators: Fn7<A, B1, B2, B3, B4, B5, B6, B7>, dispatch: Dispatch<S, A>): Fn7<A, B1, B2, B3, B4, B5, B6, B7>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4, B5, B6, B7, B8>(actionCreators: Fn8<A, B1, B2, B3, B4, B5, B6, B7, B8>, dispatch: Dispatch<S, A>): Fn8<A, B1, B2, B3, B4, B5, B6, B7, B8>;
+  declare function bindActionCreators<S, A, B1, B2, B3, B4, B5, B6, B7, B8, B9>(actionCreators: Fn9<A, B1, B2, B3, B4, B5, B6, B7, B8, B9>, dispatch: Dispatch<S, A>): Fn9<A, B1, B2, B3, B4, B5, B6, B7, B8, B9>;
   // unsafe (all action creator signatures are erased)
   declare function bindActionCreators<S, A, K, C: ActionCreators<K, A>>(actionCreators: C, dispatch: Dispatch<S, A>): ActionCreators<$Keys<C>, A>;
 
