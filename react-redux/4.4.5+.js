@@ -20,12 +20,12 @@ declare module 'react-redux' {
 
   declare type StatelessComponent<P> = (props: P) => ?React$Element<any>;
 
-  declare class ConnectedComponent<OP, P, Def, St> extends React$Component<Def, OP, St> {
-    static WrappedComponent: any;
-    getWrappedInstance(): any;
-    static defaultProps: Def;
+  declare class ConnectedComponent<OP, P, Def, St> extends React$Component<void, OP, void> {
+    static WrappedComponent: Class<React$Component<Def, OP, St>>;
+    getWrappedInstance(): React$Component<Def, P, St>;
+    static defaultProps: void;
     props: OP;
-    state: St;
+    state: void;
   }
 
   declare type ConnectedComponentClass<OP, P, Def, St> = Class<ConnectedComponent<OP, P, Def, St>>;
