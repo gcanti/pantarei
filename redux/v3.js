@@ -46,8 +46,8 @@ declare module 'redux' {
   declare function bindActionCreators<A, C: ActionCreator<A, *>>(actionCreator: C, dispatch: Dispatch<A>): C;
   declare function bindActionCreators<A, K, C: ActionCreators<K, A>>(actionCreators: C, dispatch: Dispatch<A>): C;
 
-  // unsafe (you can miss a field and / or assign a wrong reducer to a field)
-  declare function combineReducers<S: Object, A>(reducers: {[key: $Keys<S>]: Reducer<*, A>}): Reducer<S, A>;
+  type ExtractState = <S>(r: Reducer<S, *>) => S;
+  declare function combineReducers<O, A>(reducers: O): Reducer<$ObjMap<O, ExtractState>, A>;
 
   declare function compose<S, A>(...fns: Array<StoreEnhancer<S, A>>): Function;
 
