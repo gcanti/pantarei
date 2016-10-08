@@ -1,0 +1,9 @@
+[include]
+
+[ignore]
+
+[libs]
+tcomb.js
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$ExpectError

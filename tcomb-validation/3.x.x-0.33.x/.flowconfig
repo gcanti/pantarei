@@ -1,0 +1,10 @@
+[include]
+
+[ignore]
+
+[libs]
+../../tcomb/3.x.x-0.33.x/tcomb.js
+tcomb-validation.js
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$ExpectError
