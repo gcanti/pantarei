@@ -1,0 +1,10 @@
+[include]
+
+[ignore]
+
+[libs]
+xstream.js
+cycle-xstream-run.js
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$ExpectError
