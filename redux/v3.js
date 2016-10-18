@@ -41,13 +41,12 @@ declare module 'redux' {
   declare function applyMiddleware<S, A>(...middlewares: Array<Middleware<S, A>>): StoreEnhancer<S, A>;
 
   declare type ActionCreator<A, B> = (...args: Array<B>) => A;
-  declare type ActionCreators<K, A> = { [key: K]: ActionCreator<A, *> };
+  declare type ActionCreators<K, A> = { [key: K]: ActionCreator<A, any> };
 
-  declare function bindActionCreators<A, C: ActionCreator<A, *>>(actionCreator: C, dispatch: Dispatch<A>): C;
+  declare function bindActionCreators<A, C: ActionCreator<A, any>>(actionCreator: C, dispatch: Dispatch<A>): C;
   declare function bindActionCreators<A, K, C: ActionCreators<K, A>>(actionCreators: C, dispatch: Dispatch<A>): C;
 
-  type ExtractState = <S>(r: Reducer<S, *>) => S;
-  declare function combineReducers<O, A>(reducers: O): Reducer<$ObjMap<O, ExtractState>, A>;
+  declare function combineReducers<O: Object, A>(reducers: O): Reducer<$ObjMap<O, <S>(r: Reducer<S, any>) => S>, A>;
 
   declare function compose<S, A>(...fns: Array<StoreEnhancer<S, A>>): Function;
 
